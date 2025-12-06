@@ -34,7 +34,7 @@ double calcTemp() {
 
   // Averaging
   float V = 0;
-  int N = 20;
+  int N = 50;
   for (int i = 0; i < N; i++) {
     V += analogRead(TEMP_PIN);
   }
