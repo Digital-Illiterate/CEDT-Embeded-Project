@@ -34,7 +34,7 @@ double calcTemp() {
 
   // Averaging
   float V = 0;
-  int N = 20;
+  int N = 50;
   for (int i = 0; i < N; i++) {
     V += analogRead(TEMP_PIN);
   }
@@ -43,7 +43,7 @@ double calcTemp() {
   double logR2 = log(R1 * (4095.0 / (float)V - 1.0)); // calculate log resistance on thermistor
   double T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2)); // temperature in Kelvin
   T = T - 273.15;
-  T = T + 1.5;
+  T = T + 3;
   return T; 
 }
 
@@ -69,17 +69,17 @@ void OnDataRecv(const esp_now_recv_info *info, const uint8_t *data, int len) {
     memcpy(&receivedSensorData, data, sizeof(receivedSensorData));
 
   // --- PRINT RECEIVED DATA ---
-  Serial.print("\n[RECEIVED ESP-NOW] From: ");
-  for (int i = 0; i < 6; i++) {
-    Serial.printf("%02X:", info->src_addr[i]);
-  }
-  Serial.println();
+  // Serial.print("\n[RECEIVED ESP-NOW] From: ");
+  // for (int i = 0; i < 6; i++) {
+  //   Serial.printf("%02X:", info->src_addr[i]);
+  // }
+  // Serial.println();
 
-  Serial.print("  Temp (DHT): "); Serial.println(receivedSensorData.temp);
-  Serial.print("  Humidity: "); Serial.println(receivedSensorData.humid);
-  Serial.print("  Sound (ADC): "); Serial.println(receivedSensorData.sound);
-  Serial.print("  Gas (ADC): "); Serial.println(receivedSensorData.gas);
-  Serial.print("  Dust (ADC): "); Serial.println(receivedSensorData.dust);
+  // Serial.print("  Temp (DHT): "); Serial.print(receivedSensorData.temp);
+  // Serial.print("  Humidity: "); Serial.print(receivedSensorData.humid);
+  // Serial.print("  Sound (ADC): "); Serial.print(receivedSensorData.sound);
+  // Serial.print("  Gas (ADC): "); Serial.print(receivedSensorData.gas);
+  // Serial.print("  Dust (ADC): "); Serial.print(receivedSensorData.dust);
 }
 
 void setup() {
@@ -87,7 +87,7 @@ void setup() {
   pinMode(TEMP_PIN, INPUT);
   delay(1000);
 
-  Serial.println("ESP32 Receiver Booting...");
+//  Serial.println("ESP32 Receiver Booting...");
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
@@ -97,9 +97,9 @@ void setup() {
       delay(500);
       Serial.print(".");
   }
-  Serial.println("\nWiFi Connected.");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
+  // Serial.println("\nWiFi Connected.");
+  // Serial.print("IP Address: ");
+  // Serial.println(WiFi.localIP());
   if (!WiFi.softAP(AP_SSID, AP_PASSWORD)) {
     Serial.println("AP Setup Failed.");
   }
@@ -120,7 +120,7 @@ void setup() {
   Serial.println("Connecting to Firebase...");
   Firebase.begin(&config, &auth);
   Firebase.reconnectNetwork(true);
-  Serial.println("Firebase Ready.");
+  //Serial.println("Firebase Ready.");
 }
 
 void loop() {
@@ -166,9 +166,9 @@ void loop() {
   delay(500);
   WiFi.mode(WIFI_STA); 
   
-  Serial.println("-------------------------------------");
-  Serial.print("ESP32 Wi-Fi MAC Address: ");
-  // Print the MAC address
-  Serial.println(WiFi.macAddress()); 
-  Serial.println("-------------------------------------");
+  // Serial.println("-------------------------------------");
+  // Serial.print("ESP32 Wi-Fi MAC Address: ");
+  // // Print the MAC address
+  // Serial.println(WiFi.macAddress()); 
+  // Serial.println("-------------------------------------");
 }
