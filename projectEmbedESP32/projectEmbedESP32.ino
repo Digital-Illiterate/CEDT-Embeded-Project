@@ -42,7 +42,9 @@ double calcTemp() {
   
   double logR2 = log(R1 * (4095.0 / (float)V - 1.0)); // calculate log resistance on thermistor
   double T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2)); // temperature in Kelvin
-  return T - 273.15; //convert Kelvin to Celcius
+  T = T - 273.15;
+  T = T + 1.5;
+  return T; 
 }
 
 double readLight() {

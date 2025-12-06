@@ -51,18 +51,21 @@ int readDust() {
 
 void setup() {
   Serial.begin(115200);
-  Serial.print("aaaaa");
+// Add a small delay for native USB on ESP32-S3 to initialize fully
+  delay(100); 
+  Serial.println("--- Starting Setup ---");
 
-  WiFi.mode(WIFI_STA);
+// 1. Wi-Fi and ESP-NOW Initialization
+  WiFi.mode(WIFI_STA); // Set device as a Station
 
   if (esp_now_init() != ESP_OK) {
     Serial.println("ESP-NOW init failed");
-    return;
+    return; // Halt if initialization fails
   }
 
-  esp_now_register_send_cb(OnDataSent);
-  
-  // Add Receiver
+  esp_now_register_send_cb(OnDataSent); // Register callback function
+
+// 2. Add Peer (Receiver)
   esp_now_peer_info_t peerInfo{};
   memcpy(peerInfo.peer_addr, receiverMAC, 6);
   peerInfo.channel = 0;
@@ -70,33 +73,40 @@ void setup() {
 
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer");
-    return;
+    return; // Halt if adding peer fails
   }
 
-  // Sensor init
-  dht.begin();
-  pinMode(GP_LED_PIN, OUTPUT);
-  digitalWrite(GP_LED_PIN, HIGH);
+// 3. Sensor Initialization
+  dht.begin(); // Initialize DHT sensor
 
+// Initialize dust sensor LED pin
+  pinMode(GP_LED_PIN, OUTPUT);
+  digitalWrite(GP_LED_PIN, HIGH); // Keep LED off initially
+
+// Set ADC resolution
   analogReadResolution(12);
+
+  Serial.println("--- Setup Complete. Starting Loop. ---");
 }
 
 void loop() {
+// Read all sensor values
   packet.temp = dht.readTemperature();
   packet.humid = dht.readHumidity();
   packet.sound = analogRead(SOUND_PIN);
-  packet.gas   = analogRead(MQ135_PIN);
-  packet.dust  = readDust();
+  packet.gas = analogRead(MQ135_PIN);
+  packet.dust = readDust();
 
+// Send data via ESP-NOW
   esp_now_send(receiverMAC, (uint8_t *)&packet, sizeof(packet));
 
-  // ----- PRINT EVERYTHING -----
+// ----- PRINT EVERYTHING -----
   Serial.print("Sent | ");
-  Serial.print("Temp: ");  Serial.print(packet.temp);
-  Serial.print("  Humid: "); Serial.print(packet.humid);
-  Serial.print("  Sound: "); Serial.print(packet.sound);
-  Serial.print("  Gas: ");   Serial.print(packet.gas);
-  Serial.print("  Dust: ");  Serial.println(packet.dust);
+  Serial.print("Temp: "); Serial.print(packet.temp);
+  Serial.print(" Humid: "); Serial.print(packet.humid);
+  Serial.print(" Sound: "); Serial.print(packet.sound);
+  Serial.print(" Gas: ");  Serial.print(packet.gas);
+  Serial.print(" Dust: "); Serial.println(packet.dust);
 
-  delay(500);
+  delay(500); // Wait 500ms before next reading/send
 }
