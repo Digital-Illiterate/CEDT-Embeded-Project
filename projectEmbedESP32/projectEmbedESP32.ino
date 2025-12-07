@@ -43,7 +43,7 @@ double calcTemp() {
   double logR2 = log(R1 * (4095.0 / (float)V - 1.0)); // calculate log resistance on thermistor
   double T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2)); // temperature in Kelvin
   T = T - 273.15;
-  T = T + 3;
+  T = T + 3.5;
   return T; 
 }
 
@@ -74,12 +74,6 @@ void OnDataRecv(const esp_now_recv_info *info, const uint8_t *data, int len) {
   //   Serial.printf("%02X:", info->src_addr[i]);
   // }
   // Serial.println();
-
-  // Serial.print("  Temp (DHT): "); Serial.print(receivedSensorData.temp);
-  // Serial.print("  Humidity: "); Serial.print(receivedSensorData.humid);
-  // Serial.print("  Sound (ADC): "); Serial.print(receivedSensorData.sound);
-  // Serial.print("  Gas (ADC): "); Serial.print(receivedSensorData.gas);
-  // Serial.print("  Dust (ADC): "); Serial.print(receivedSensorData.dust);
 }
 
 void setup() {
@@ -88,7 +82,7 @@ void setup() {
   delay(1000);
 
 //  Serial.println("ESP32 Receiver Booting...");
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_STA);WiFi.setChannel(0);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   // ---- WiFi Connection ----
@@ -146,11 +140,11 @@ void loop() {
   Serial.print("    DHT Temp: "); Serial.print(espNowTemp);
   Serial.print(" °C | Humidity: "); Serial.print(espNowHumid);
   Serial.println(" %");
-  Serial.print("    Sound: "); Serial.print(espNowSound);
-  Serial.println(" ADC");
+  Serial.print("    Sound: "); Serial.println(espNowSound);
   Serial.print("    Gas (MQ-135): "); Serial.print(espNowGas);
-  Serial.print(" ADC | Dust (GP2Y1014): "); Serial.print(espNowDust);
-  Serial.println(" ADC");
+  Serial.print(" ppm ");
+  Serial.print(" Dust (GP2Y1014): "); Serial.print(espNowDust);
+  Serial.println(" μg/m³");
 
   Serial.println("=================================");  
 
@@ -169,6 +163,6 @@ void loop() {
   // Serial.println("-------------------------------------");
   // Serial.print("ESP32 Wi-Fi MAC Address: ");
   // // Print the MAC address
-  // Serial.println(WiFi.macAddress()); 
+   Serial.println(WiFi.macAddress()); 
   // Serial.println("-------------------------------------");
 }

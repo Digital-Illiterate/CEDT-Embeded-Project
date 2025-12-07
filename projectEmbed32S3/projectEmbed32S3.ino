@@ -39,19 +39,30 @@ void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
 }
 
 // -------- Dust Sensor Function --------
-int readDust() {
-  digitalWrite(GP_LED_PIN, LOW);
-  delayMicroseconds(280);
-  int dust = analogRead(GP_ADC_PIN);
-  delayMicroseconds(40);
-  digitalWrite(GP_LED_PIN, HIGH);
-  delayMicroseconds(9680);
-  return dust;
+float readDustDensity() {
+    digitalWrite(GP_LED_PIN, LOW);
+    delayMicroseconds(280);
+    float voltage = analogRead(GP_ADC_PIN) * (3.3 / 4095.0);
+    delayMicroseconds(40);
+    digitalWrite(GP_LED_PIN, HIGH);
+    delayMicroseconds(9680);
+    
+    float density = 0.17 * voltage * 1000 - 0.1; // Convert V to mV if needed
+    return density; // μg/m³
+}
+
+float R0 = 10000; //Rs_clean_air
+
+int readGas(){
+  float voltage = analogRead(MQ135_PIN)* (3.3 / 4095.0);
+  float Rs = 10000*(3.3-voltage)/voltage;
+  float ratio = Rs/R0;
+  float ppm = 116.6020682 * pow(ratio, -2.769034857); //CO2 approximation
+  return (int)ppm;
 }
 
 void setup() {
   Serial.begin(115200);
-// Add a small delay for native USB on ESP32-S3 to initialize fully
   delay(100); 
   Serial.println("--- Starting Setup ---");
 
@@ -76,17 +87,12 @@ void setup() {
     return; // Halt if adding peer fails
   }
 
-// 3. Sensor Initialization
   dht.begin(); // Initialize DHT sensor
 
-// Initialize dust sensor LED pin
   pinMode(GP_LED_PIN, OUTPUT);
-  digitalWrite(GP_LED_PIN, HIGH); // Keep LED off initially
+  digitalWrite(GP_LED_PIN, HIGH); 
 
-// Set ADC resolution
   analogReadResolution(12);
-
-  Serial.println("--- Setup Complete. Starting Loop. ---");
 }
 
 void loop() {
@@ -94,8 +100,8 @@ void loop() {
   packet.temp = dht.readTemperature();
   packet.humid = dht.readHumidity();
   packet.sound = analogRead(SOUND_PIN);
-  packet.gas = analogRead(MQ135_PIN);
-  packet.dust = readDust();
+  packet.gas = readGas();
+  packet.dust = readDustDensity();
 
 // Send data via ESP-NOW
   esp_now_send(receiverMAC, (uint8_t *)&packet, sizeof(packet));
@@ -105,8 +111,8 @@ void loop() {
   Serial.print("Temp: "); Serial.print(packet.temp);
   Serial.print(" Humid: "); Serial.print(packet.humid);
   Serial.print(" Sound: "); Serial.print(packet.sound);
-  Serial.print(" Gas: ");  Serial.print(packet.gas);
-  Serial.print(" Dust: "); Serial.println(packet.dust);
+  Serial.print(" Gas: ");  Serial.print(packet.gas);  Serial.print(" ppm ");
+  Serial.print("Dust Density: "); Serial.print(packet.dust); Serial.println(" μg/m³");
 
-  delay(500); // Wait 500ms before next reading/send
+  delay(1000);
 }
