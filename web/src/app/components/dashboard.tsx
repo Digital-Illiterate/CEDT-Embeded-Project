@@ -238,7 +238,7 @@ const DashboardComponent: React.FC = () => {
 
           {/* Metric Card 1: Local Temp */}
           <div className="p-4 rounded-lg shadow-sm border border-indigo-200">
-            <p className="text-sm text-gray-500">Local Temp</p>
+            <p className="text-sm text-gray-500">Gateway Temp</p>
             <p className="text-2xl font-extrabold text-indigo-700">
               {data.local.temp.toFixed(2)} °C
             </p>
@@ -246,18 +246,18 @@ const DashboardComponent: React.FC = () => {
 
           {/* Metric Card 2: Local Light */}
           <div className="p-4 rounded-lg shadow-sm border border-yellow-200">
-            <p className="text-sm text-gray-500">Local Light</p>
+            <p className="text-sm text-gray-500">Gateway Light</p>
             <p className="text-2xl font-extrabold text-yellow-700">
               {data.local.light.toFixed(2)} %
             </p>
           </div>
           
           {/* --- REMOTE METRICS --- */}
-          <h3 className="text-sm font-semibold text-gray-600 mt-4 pt-2 border-t">NODE SENSORS</h3>
+          <h3 className="text-sm font-semibold text-gray-600 mt-4 pt-2 border-t">SENSOR-NODE SENSORS</h3>
 
           {/* Metric Card 3: Remote Temp */}
           <div className="p-4 rounded-lg shadow-sm border border-red-200">
-            <p className="text-sm text-gray-500">Remote Temp</p>
+            <p className="text-sm text-gray-500">Sensor-Node Temp</p>
             <p className="text-2xl font-extrabold text-red-700">
               {data.remote.temp.toFixed(2)} °C
             </p>

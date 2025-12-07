@@ -173,8 +173,7 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
             stroke="#4b5563" // Dark Gray
             dot={false}
             name="Dust Level"
-            // unit="μg/m³"
-            unit="units"
+            unit="μg/m³"
             yAxisId={0}
           />
           )}
@@ -187,8 +186,7 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
             stroke="#9333ea" // Violet
             dot={false}
             name="Gas Reading"
-            // unit="ppm"
-            unit="units"
+            unit="ppm"
             yAxisId={0}
           />
           )}
