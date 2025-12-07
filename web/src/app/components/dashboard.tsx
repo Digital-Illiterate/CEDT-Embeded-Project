@@ -283,8 +283,7 @@ const DashboardComponent: React.FC = () => {
           <div className="p-4 rounded-lg shadow-sm border border-gray-400">
             <p className="text-sm text-gray-500">Dust Level</p>
             <p className="text-2xl font-extrabold text-gray-700">
-              {/* {data.remote.dust} μg/m³ */}
-              {data.remote.dust} units
+              {data.remote.dust} μg/m³
             </p>
           </div>
 
@@ -292,8 +291,7 @@ const DashboardComponent: React.FC = () => {
           <div className="p-4 rounded-lg shadow-sm border border-purple-200">
             <p className="text-sm text-gray-500">Gas Reading</p>
             <p className="text-2xl font-extrabold text-purple-700">
-              {/* {data.remote.gas} ppm */}
-              {data.remote.gas} units
+              {data.remote.gas} ppm
             </p>
           </div>
           
