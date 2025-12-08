@@ -107,7 +107,7 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
             dataKey="localTemp"
             stroke="#4f46e5" // Indigo
             dot={false}
-            name="Local Temp"
+            name="Gateway Temp"
             unit="°C"
             yAxisId={0}
           />
@@ -120,7 +120,7 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
             dataKey="remoteTemp"
             stroke="#b91c1c" // Red
             dot={false}
-            name="Remote Temp"
+            name="Sensor-node Temp"
             unit="°C"
             yAxisId={0}
           />
@@ -146,7 +146,7 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
             dataKey="localLight"
             stroke="#f59e0b" // Amber/Yellow
             dot={false}
-            name="Local Light"
+            name="Gateway Light"
             unit="%"
             yAxisId={0} // 🎯 CHANGED to yAxisId={0}
           />
