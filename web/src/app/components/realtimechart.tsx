@@ -14,9 +14,9 @@ import {
 // HistoryItem Interface (same)
 interface HistoryItem {
   time: number;
-  localTemp: number;
-  localLight: number;
-  remoteTemp: number;
+  gatewayTemp: number;
+  gatewayLight: number;
+  nodeTemp: number;
   humidity: number;
   sound: number;
   dust: number;
@@ -25,9 +25,9 @@ interface HistoryItem {
 
 // Interface for configuration (same)
 interface ChartConfig {
-    localTemp: boolean;
-    localLight: boolean;
-    remoteTemp: boolean;
+    gatewayTemp: boolean;
+    gatewayLight: boolean;
+    nodeTemp: boolean;
     humidity: boolean;
     sound: boolean;
     dust: boolean;
@@ -101,10 +101,10 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
           <Legend />
 
           {/* 1. Local Temperature Line (yAxisId=0) */}
-          {config.localTemp && (
+          {config.gatewayTemp && (
           <Line
             type="monotone"
-            dataKey="localTemp"
+            dataKey="gatewayTemp"
             stroke="#4f46e5" // Indigo
             dot={false}
             name="Gateway Temp"
@@ -114,10 +114,10 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
           )}
 
           {/* 2. Remote Temperature Line (yAxisId=0) */}
-          {config.remoteTemp && (
+          {config.nodeTemp && (
           <Line
             type="monotone"
-            dataKey="remoteTemp"
+            dataKey="nodeTemp"
             stroke="#b91c1c" // Red
             dot={false}
             name="Sensor-node Temp"
@@ -140,10 +140,10 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({ data, config }) => {
           )}
           
           {/* 4. Local Light Line (yAxisId=0) - NOW USES PRIMARY AXIS */}
-          {config.localLight && (
+          {config.gatewayLight && (
           <Line
             type="monotone"
-            dataKey="localLight"
+            dataKey="gatewayLight"
             stroke="#f59e0b" // Amber/Yellow
             dot={false}
             name="Gateway Light"

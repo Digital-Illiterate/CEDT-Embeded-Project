@@ -24,9 +24,9 @@ interface DashboardData {
 
 interface HistoryItem {
   time: number;
-  localTemp: number;
-  localLight: number;
-  remoteTemp: number;
+  gatewayTemp: number;
+  gatewayLight: number;
+  nodeTemp: number;
   humidity: number;
   sound: number;
   dust: number;
@@ -42,9 +42,9 @@ interface CombinedState {
 }
 
 interface ChartConfig {
-    localTemp: boolean;
-    localLight: boolean;
-    remoteTemp: boolean;
+    gatewayTemp: boolean;
+    gatewayLight: boolean;
+    nodeTemp: boolean;
     humidity: boolean;
     sound: boolean;
     dust: boolean;
@@ -71,9 +71,9 @@ const DashboardComponent: React.FC = () => {
     
     // State for Chart Configuration (which lines to show)
     const [chartConfig, setChartConfig] = useState<ChartConfig>({
-        localTemp: true,
-        localLight: false,
-        remoteTemp: true,
+        gatewayTemp: true,
+        gatewayLight: false,
+        nodeTemp: true,
         humidity: true,
         sound: false,
         dust: false,
@@ -99,9 +99,9 @@ const DashboardComponent: React.FC = () => {
         
         const newHistoryItem: HistoryItem = {
             time: newTimestamp,
-            localTemp: Math.round(currentData.local.temp * 100) / 100,
-            localLight: Math.round(currentData.local.light * 100) / 100,
-            remoteTemp: Math.round(currentData.remote.temp * 100) / 100,
+            gatewayTemp: Math.round(currentData.local.temp * 100) / 100,
+            gatewayLight: Math.round(currentData.local.light * 100) / 100,
+            nodeTemp: Math.round(currentData.remote.temp * 100) / 100,
             humidity: Math.round(currentData.remote.humid * 100) / 100, 
             sound: currentData.remote.sound,
             dust: currentData.remote.dust,
